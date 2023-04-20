@@ -10,26 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Employee {
-  id        String @id @default(uuid())
+model User {
+  id        String  @id @default(uuid())
   firstname String
   lastname  String
   email     String
   password  String
-}
-
-model Admin {
-  id        String @id @default(uuid())
-  firstname String
-  lastname  String
-  email     String
-  password  String
+  isAdmin   Boolean
+  Task      Task[]
 }
 
 model Task {
   id String @id @default(uuid())
-  //assignedto
-  //content
-  //duedate
-  //status
+
+  Content    String
+  Duedate    DateTime
+  taskDone   Boolean  @default(false)
+  Assignedto User     @relation(fields: [userId], references: [id])
+  userId     String
 }
