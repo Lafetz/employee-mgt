@@ -1,6 +1,5 @@
 import db from "../db/db";
 import { Request, Response, NextFunction } from "express";
-import { empty } from "@prisma/client/runtime";
 
 export const listEmployees = async (
   req: Request,
@@ -74,6 +73,7 @@ export const updateEmployee = async (
         isAdmin: false,
       },
     });
+    res.sendStatus(200);
   } catch (err) {
     //res.status(500).json(err.message);
   }

@@ -21,10 +21,10 @@ model User {
 }
 
 model Task {
-  id String @id @default(uuid())
-
-  Content    String
-  Duedate    DateTime
+  id         String   @id @default(uuid())
+  name       String
+  content    String
+  duedate    DateTime
   taskDone   Boolean  @default(false)
   Assignedto User     @relation(fields: [userId], references: [id])
   userId     String
