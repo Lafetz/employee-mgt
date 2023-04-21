@@ -18,6 +18,7 @@ model User {
   password  String
   isAdmin   Boolean
   Task      Task[]
+  Leave     Leave[]
 }
 
 model Task {
@@ -28,4 +29,21 @@ model Task {
   taskDone   Boolean  @default(false)
   Assignedto User     @relation(fields: [userId], references: [id])
   userId     String
+}
+
+model Leave {
+  id        String   @id @default(uuid())
+  name      String
+  content   String
+  startDate DateTime
+  endDate   DateTime
+  status    Status
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
 }
