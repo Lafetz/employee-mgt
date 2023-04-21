@@ -1,4 +1,4 @@
-import db from "../db/db";
+import db from "../utils/db";
 import { Request, Response, NextFunction } from "express";
 
 export const listEmployees = async (
@@ -9,14 +9,16 @@ export const listEmployees = async (
   try {
     const employees = await db.user.findMany({
       where: {
-        isAdmin: {
-          not: true,
-        },
+        isAdmin: false,
       },
     });
-    res.sendStatus(200).json(employees);
+    res.json(employees);
   } catch (err) {
-    // res.status(500).json(err.message);
+    if (typeof err === "string") {
+      res.status(500).json(err);
+    } else if (err instanceof Error) {
+      res.status(500).json(err.message);
+    }
   }
 };
 export const addEmployee = async (
@@ -25,6 +27,7 @@ export const addEmployee = async (
   next: NextFunction
 ) => {
   try {
+    console.log("running", req.body);
     const employee = await db.user.create({
       data: {
         firstname: req.body.firstname,
@@ -34,9 +37,13 @@ export const addEmployee = async (
         isAdmin: false,
       },
     });
-    console.log(employee);
+    res.sendStatus(201);
   } catch (err) {
-    //res.status(500).json(err.message);
+    if (typeof err === "string") {
+      res.status(500).json(err);
+    } else if (err instanceof Error) {
+      res.status(500).json(err.message);
+    }
   }
 };
 export const removeEmployee = async (
@@ -47,12 +54,16 @@ export const removeEmployee = async (
   try {
     await db.user.delete({
       where: {
-        id: req.body.id,
+        id: req.params.employeeId,
       },
     });
     res.sendStatus(200);
   } catch (err) {
-    //res.status(500).json(err.message);
+    if (typeof err === "string") {
+      res.status(500).json(err);
+    } else if (err instanceof Error) {
+      res.status(500).json(err.message);
+    }
   }
 };
 export const updateEmployee = async (
@@ -63,7 +74,7 @@ export const updateEmployee = async (
   try {
     await db.user.update({
       where: {
-        id: req.body.id,
+        id: req.params.employeeId,
       },
       data: {
         firstname: req.body.firstname,
@@ -75,6 +86,10 @@ export const updateEmployee = async (
     });
     res.sendStatus(200);
   } catch (err) {
-    //res.status(500).json(err.message);
+    if (typeof err === "string") {
+      res.status(500).json(err);
+    } else if (err instanceof Error) {
+      res.status(500).json(err.message);
+    }
   }
 };
