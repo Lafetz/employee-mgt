@@ -7,14 +7,26 @@ export const userLogin = async (
   next: NextFunction
 ) => {
   try {
-    const admin = await db.user.findUnique({
+    const user = await db.user.findUnique({
       where: {
         email: req.body.email,
       },
     });
-    if (admin) {
-      const statusLogin = bcrypt.compare(req.body.password, admin.password);
-      res.status(200).json(statusLogin);
+    if (user) {
+      const statusLogin = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      // const accessToken = jwt.sign(user.toJSON(), process.env.TOP_KEY);
+      const accessToken = 0;
+      res
+        .cookie("token", accessToken, {
+          maxAge: 86400 * 1000,
+          secure: true,
+          httpOnly: true,
+        })
+        .status(200)
+        .json("login success!");
     } else {
       res.status(500).json("User not found");
     }
