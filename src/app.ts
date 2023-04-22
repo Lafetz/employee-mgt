@@ -2,6 +2,7 @@ import express from "express";
 import employees from "./routes/employees.route";
 import tasks from "./routes/tasks.routes";
 import leaves from "./routes/leaves.route";
+import auth from "./routes/auth.route";
 import * as dotenv from "dotenv";
 import cors from "cors";
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/employees", employees);
 app.use("/tasks", tasks);
 app.use("/leaves", leaves);
+app.use("/auth", auth);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

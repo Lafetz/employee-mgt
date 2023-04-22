@@ -52,7 +52,7 @@ export const removeTask = async (
   try {
     await db.task.delete({
       where: {
-        id: req.body.id,
+        id: req.params.taskId,
       },
     });
     res.sendStatus(200);
@@ -72,7 +72,7 @@ export const updateTask = async (
   try {
     await db.task.update({
       where: {
-        id: req.body.id,
+        id: req.params.taskId,
       },
       data: {
         name: req.body.name,

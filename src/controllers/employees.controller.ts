@@ -1,6 +1,6 @@
 import db from "../utils/db";
 import { Request, Response, NextFunction } from "express";
-
+import bcrypt from "bcryptjs";
 export const listEmployees = async (
   req: Request,
   res: Response,
@@ -27,13 +27,13 @@ export const addEmployee = async (
   next: NextFunction
 ) => {
   try {
-    console.log("running", req.body);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const employee = await db.user.create({
       data: {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
-        password: req.body.password,
+        password: hashedPassword,
         isAdmin: false,
       },
     });
