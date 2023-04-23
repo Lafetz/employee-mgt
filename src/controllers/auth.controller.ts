@@ -1,4 +1,5 @@
 import db from "../utils/db";
+import * as jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 export const userLogin = async (
@@ -15,12 +16,22 @@ export const userLogin = async (
     if (user) {
       const statusLogin = await bcrypt.compare(
         req.body.password,
+
         user.password
       );
-      // const accessToken = jwt.sign(user.toJSON(), process.env.TOP_KEY);
-      const accessToken = 0;
+      if (!statusLogin) {
+        res.sendStatus(401).json("incorrect password!");
+        return next();
+      }
+      const accessToken = jwt.sign(user, process.env.JWT_KEY as string);
+      const refreshToken = jwt.sign(user, process.env.JWT_KEY as string);
+      res.cookie("refreshToken", refreshToken, {
+        maxAge: 86400 * 1000,
+        secure: true,
+        httpOnly: true,
+      });
       res
-        .cookie("token", accessToken, {
+        .cookie("accesstoken", accessToken, {
           maxAge: 86400 * 1000,
           secure: true,
           httpOnly: true,
