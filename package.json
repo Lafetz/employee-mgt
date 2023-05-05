@@ -17,6 +17,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prestart:docker": "npm run prisma:generate && npm run prisma:migrate",
     "start": "node dist/app.js",
     "devStart": "npx tsc -w & nodemon dist/app.js",
     "build": "npx tsc"

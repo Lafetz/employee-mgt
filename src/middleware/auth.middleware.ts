@@ -11,9 +11,12 @@ export const verifyToken = (
     if (!accessToken) {
       return res.sendStatus(401);
     }
-
-    const data = jwt.verify(accessToken, process.env.JWT_KEY as string);
-    req.user = data as object; //
+    try {
+      const data = jwt.verify(accessToken, process.env.JWT_KEY as string);
+      req.user = data as object; //
+    } catch (err) {
+      console.log(err);
+    }
 
     next();
   } catch (err) {

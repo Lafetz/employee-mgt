@@ -23,5 +23,7 @@ app.use("/leaves", leaves);
 app.use("/auth", auth);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
+  console.log(`db location ${process.env.DATABASE_URL}`);
   console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port s`);
 });
